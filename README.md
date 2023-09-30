@@ -1,2 +1,5 @@
 # ANT_diffusion
-Official pytorch implementation of "Addressing Negative Transfer in Diffusion Models" in Neurips2023
+[[Arxiv]](https://arxiv.org/abs/2306.00354)
+
+Official code implementation for "Addressing Negative Transfer in Diffusion Models" in Neurips 2023.
+
