@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+        content="Analyzing and improving diffusion training via a multi-task learning perspective.">
+  <meta name="keywords" content="Diffusion Models, Multi-task Learning">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ANT: Addressing Negative Transfer in Diffusion Models</title>
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+
+    gtag('config', 'G-PYVRSFMDRL');
+  </script> -->
+<!-- Google Tag Manager -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-WKN9LMT4');</script>
+  <!-- End Google Tag Manager -->
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+        rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <!-- todo -->
+  <link rel="icon" href="./static/images/favicon.svg">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+  <script type="text/javascript" id="MathJax-script" async
+    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+  </script>
+</head>
+<body>
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WKN9LMT4"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-1 publication-title">Addressing Negative Transfer in Diffusion Models</h1>
+
+          <div class="is-size-4 neurips accepted">
+            <strong>Accepted to NeurIPS 2023</strong>
+          </div>
+          <br> 
+
+          <div class="is-size-4 publication-authors">
+            <span class="author-block" style="color: #0606e8;">
+              Hyojun Go<sup>*</sup>,</span>
+            <span class="author-block" style="color:#409c57;">
+              Jinyoung Kim<sup>*</sup>,</span>
+            <span class="author-block" style="color:#409c57;">
+              Yunsung Lee<sup>*</sup>,</span>
+            </span>
+            <span class="author-block"  style="color:#409c57;">
+              Seunghyun Lee<sup>*</sup>,</span>
+            </span>
+            <span class="author-block"  style="color:#409c57;">
+              Shinhyeok Oh,</span>
+            </span>
+            <span class="author-block" style="color:#b97f87;">
+              Hyeongdon Moon,</span>
+            </span>
+            <span class="author-block" style="color:#409c57;">
+              Seungtaek Choi<sup>&#8224;</sup></span>
+            </span>
+          </div>
+
+          <br>
+          <div class="is-size-5 publication-authors">
+            <span class="author-block"><b style="color:#0606e8; font-weight:normal">&#x25B6 </b> Twelve Labs</b></span>
+            <span class="author-block">&nbsp&nbsp <b style="color:#409c57; font-weight:normal">&#x25B6 </b> Riiid</span>
+            <span class="author-block">&nbsp&nbsp <b style="color:#b97f87; font-weight:normal">&#x25B6 </b> EPFL</span>
+            <span class="author-block">&nbsp&nbsp<sup>*</sup>Co-first author</span>
+            <span class="author-block">&nbsp&nbsp<sup>&#8224;</sup>Corresponding Author</span>
+          </div>
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <span class="link-block">
+                <a href="https://arxiv.org/pdf/2306.00354"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                  </span>
+                  <span>Paper</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href="https://arxiv.org/abs/2306.00354"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="ai ai-arxiv"></i>
+                  </span>
+                  <span>arXiv</span>
+                </a>
+              </span>
+              <!-- Video Link. -->
+              <!-- <span class="link-block">
+                <a href="https://www.youtube.com/watch?v=MrKrnHhk8IA"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-youtube"></i>
+                  </span>
+                  <span>Video</span>
+                </a>
+              </span> -->
+              <!-- Code Link. -->
+              <span class="link-block">
+                <a href="https://github.com/gohyojun15/ANT_diffusion"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-github"></i>
+                  </span>
+                  <span>Code</span>
+                  </a>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+
+<section class="hero teaser">
+  <div class="container is-max-desktop">
+    <div class="hero-body">
+      <h4 class="subtitle has-text-centered">
+        ANT rethinks the training of diffusion models as multi-task learning and address negative transfer in diffusion training,
+        achieving improved performance in generation quality. 
+      </h4>
+    </div>
+  </div>
+</section>
+
+
+<section class="section"  style="background-color:#efeff081">
+  <div class="container is-max-desktop">
+    <!-- Abstract. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-2">Summary</h2>
+        <div class="content has-text-justified">
+          <ul>
+            <li> We rethink the training of diffusion models as multi-task learning in that each task 
+              corresponds to a denoising task of each timestep or noise level.</li>
+            <li>We analyze diffusion training from an MTL perspective, and present two key observations: 
+              <strong>(1)</strong> the task affinity between denoising tasks diminishes as the gap between noise level widens,
+              and <strong>(2)</strong> Negative transfer, that causes performance degradation due to conflicts between tasks, 
+              can arise even in diffusion models.</li>
+            <li>We propose leveraging existing MTL methods such as PCgrad, UW, and NashMTL through grouping denoising tasks 
+              with interval clustering according to timestep.
+            </li>
+        </ul>
+        </div>
+      </div>
+    </div>
+    <!--/ Abstract. -->
+
+    <!-- Paper video. -->
+    <!-- <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-2">introduction video</h2>
+        <div class="publication-video">
+          <iframe src="https://www.youtube.com/embed/MrKrnHhk8IA?rel=0&amp;showinfo=0"
+                  frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+        </div>
+      </div>
+    </div> -->
+    <!--/ Paper video. -->
+  </div>
+</section>
+
+
+<section class="section">
+  <div class="column is-full-width">
+  <div class="container is-max-desktop">
+  <div class="container is-max-desktop">
+    <h2 class="title is-2">Observational study</h2>
+      <div class="content has-text-justified">
+        <p>
+          By denoting \(D_t\) as a denoising task of timestep \(t\) (learned by loss \(L_t = ||\epsilon - \epsilon_\theta(x_t, t)||_2^2\)),
+          we analyze the task affinity between denoising tasks of different timesteps,
+          and observe that negative transfer occurs in some denoising tasks.
+        </p>
+      </div>
+
+      
+      
+      <!-- Task Affinity -->
+      <div class="content">
+          <h2 class="title is-4"> 1. Task affinity</h2>
+          <p>
+            We adopt the gradient direction-based task affinity score: for two given tasks 
+            \(D_{t_1}\) and \(D_{t_2}\), we compute the cosine similarity 
+            between the gradient directions of the loss functions,
+            then average the similarities across training iterations.
+            In both ADM and LDM, the task affinity between denoising tasks diminishes
+             as the gap between noise level and timestep widens.
+          </p>
+          <img id="taskaffinity" src="static/images/taskaffinity.PNG">
+        </div>
+      </div>
+      <br>
+
+      <div class="content">
+        <h2 class="title is-4"> 2. Negative transfer</h2>
+          <p>
+            Negative transfer refers to a multi-task learner's performance degradation due to conflicts between tasks.
+            It can be identified by observing the performance gap between a multi-task and specific-task learner.
+            Regarding this, we define negative transfer gap (\(NTG\)), where \(NTG < 0 \) indicates that negative transfer occurs. 
+            We observe that negative transfer occurs in some denoising tasks in both ADM and LDM.
+          </p>
+          <img id="taskaffinity" src="static/images/negative_transfer.PNG">
+      </div>
+  </div>
+</section>
+  
+<section class="section" style="background-color:#efeff081">
+  <!-- Animation. -->
+  <div class="column is-full-width">
+    <div class="container is-max-desktop">
+    <div class="container is-max-desktop">
+  <!-- <div class="columns is-centered"> -->
+    <!-- <div class="column is-full-width"> -->
+      <h2 class="title is-2">Method: ANT</h2>
+
+      <!-- Interpolating. -->
+      <h3 class="title is-4">1. Leveraging MTL methods</h3>
+      <div class="content has-text-justified">
+        <p>
+          To address negative transfer, we propose leveraging existing MTL methods.
+          We adopt three MTL methods: PCgrad, UW, and NashMTL.
+        </p>
+        <ul>
+          <li> 
+            <strong>PCgrad</strong> mitigate conflicting gradients between tasks by projecting conflicting parts of gradients.
+          </li>
+          <li>
+            <strong>NashMTL</strong> balances gradients between tasks by solving a bargaining game.
+          </li>
+          <li>
+            <strong>Uncertainty Weighting (UW)</strong> balances task losses by weighting each task loss with task-dependent uncertainty.
+          </li>
+      </ul>
+      </div>
+      <br/>
+      <!--/ Interpolating. -->
+
+      <!-- Re-rendering. -->
+      <h3 class="title is-4">2. Interval clustering for efficient computation</h3>
+      <div class="content has-text-justified">
+        <p>
+          MTL methods can require a large amount of computation, especially when the number of tasks is large.
+          To address this, we leverage an interval clustering algorithm to group denoising tasks with interval clusters inspired from task affinity.
+          In our case, interval clustering assigns diffusion timesteps 
+          \(\mathcal{X} = \{1, \dots, T\}\) to \(k\) contiguous intervals \(I_{1}, \dots, I_{k}\),
+          where \(I_{i} = [l_i, r_i]\) and \(l_i \leq r_i\).
+        </p>
+        <img id="interval clustering" src="static/images/Interval_clustering.PNG">
+        <p>
+          For \(i = 1, \dots, k\) and \(l_{1} = 1\), and \(r_{i} = l_{i+1}-1\) (\(i< k\) and \(r_k=T\)), 
+          the interval clustering problem is defined as:
+          $$ \min_{l_1=1 < l_2 < ... < l_k } \sum_{i=1}^k L_{cluster}(I_i \cap \mathcal{X}) $$
+        </p>
+        <p>
+          We present timestep, SNR and gradient-based clustering cost.
+        </p>
+      </div>
+      
+      <!--/ Re-rendering. -->
+
+    </div>
+  </div>
+
+</section>
+
+<section class="section">
+  <div class="column is-full-width">
+  <div class="container is-max-desktop">
+  <div class="container is-max-desktop">
+    <h2 class="title is-2">Experimental Results</h2>
+      <!-- Task Affinity -->
+      <div class="content">
+          <h2 class="title is-4"> 1. Improved quality of generated images</h2>
+            <img id="taskaffinity" src="static/images/ANT_table1.PNG"> </img> 
+            <figcaption style="text-align: center;">
+              <strong>Table:</strong> Leveraging MTL methods through interval clustering improves the quality of generated images in both ADM and LDM trained on 
+              CelebA-HQ and FFHQ datasets.
+            </figcaption>
+            <br> </br>
+
+            <img id="taskaffinity" src="static/images/ANT_imagenet_results.PNG"> </img> 
+            <figcaption style="text-align: center;">
+              <strong>Figure:</strong> Leveraging MTL methods through interval clustering improves the quality of generated images in DiT-S trained on ImageNet dataset with classifier-free guidance.
+            </figcaption>
+        </div>
+      </div>
+      <br>
+
+      <div class="content">
+        <h2 class="title is-4"> 2. Faster convergence</h2>
+          <p>MTL methods mitigate negative transfer in training, achieving faster convergence than vanilla training.</p>
+          <img id="taskaffinity" src="static/images/fastconvergence_FFHQ_celeba.PNG">
+          <figcaption style="text-align: center;">
+            <strong>Figure:</strong> Faster convergence in ADM and LDM trained on FFHQ dataset.
+          </figcaption>
+          <br> </br>
+
+          <img id="taskaffinity" src="static/images/ANT_imagenet_convergence.PNG">
+          <figcaption style="text-align: center;">
+            <strong>Figure:</strong> Faster convergence in DiT-S trained on ImageNet dataset with classifier-free guidance.
+          </figcaption>
+      </div>
+
+
+      <br>
+      <div class="content">
+        <h2 class="title is-4"> 3. Negative transfer mitigated by MTL methods</h2>
+          <p>MTL methods with interval clustering effectively mitigate negative transfer as indicated increased \(NTG\) compared to vanilla training.</p>
+          <img id="taskaffinity" src="static/images/negative_transfer_gap.PNG">
+      </div>
+  </div>
+</section>
+
+
+
+<section class="section" id="BibTeX">
+  <div class="container is-max-desktop content">
+    <h2 class="title is-3">BibTeX</h2>
+    <pre><code>@article{go2023addressing,
+      title={Addressing Negative Transfer in Diffusion Models},
+      author={Go, Hyojun and Kim, JinYoung and Lee, Yunsung and Lee, Seunghyun and Oh, Shinhyeok and Moon, Hyeongdon and Choi, Seungtaek},
+      journal={arXiv preprint arXiv:2306.00354},
+      year={2023}
+}</code></pre>
+  </div>
+</section>
+
+<section class="section" id="Acknowledgement">
+  <div class="container is-max-desktop content">
+    <h2 class="title">Acknowledgement</h2>
+    <p>
+      This website is adapted from <a
+      href="https://github.com/nerfies/nerfies.github.io">Nerfies</a> and <a href="https://llava-vl.github.io/">LLaVA</a>, licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative
+      Commons Attribution-ShareAlike 4.0 International License</a>.
+    </p>
+</section>
+
+</body>
+</html>
