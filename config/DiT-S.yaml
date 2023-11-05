@@ -1,0 +1,9 @@
+model:
+  name: "DiT-S/2"
+  param:
+    num_classes: None # To be filled in running code.
+    latent_size: None # To be filled in running code.
+
+optim:
+  lr: 1e-4
+  weight_decay: 0.0
