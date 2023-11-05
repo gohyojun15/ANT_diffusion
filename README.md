@@ -13,7 +13,8 @@ Our implementation is based on [DiT](https://github.com/facebookresearch/DiT), [
 
 
 ## Updates
-- **2023.11.05** Initial release.
+- **2023.10.07**: [DTR](https://arxiv.org/abs/2310.07138) uses ANT-UW and shows that ANT-UW outperforms [P2weight](https://arxiv.org/abs/2204.00227) and [MinSNR](https://arxiv.org/abs/2310.07138).
+- **2023.11.05**: Initial release.
 
 
 ## Install pre-requisites
