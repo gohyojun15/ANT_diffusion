@@ -80,9 +80,7 @@ def main(args):
         model.load_state_dict(state_dict)
     model.eval()  # important!
     diffusion = create_diffusion(str(args.num_sampling_steps))
-    # vae = AutoencoderKL.from_pretrained(f"stabilityai/sd-vae-ft-{args.vae}").to(device)
 
-    # vae = AutoencoderKL.from_pretrained(f"stabilityai/sdxl-vae").to(device)
     if args.model_config == "config/DiT-S.yaml":
         vae = AutoencoderKL.from_pretrained(f"madebyollin/sdxl-vae-fp16-fix").to(device)
         scaling_factor = vae.scaling_factor
@@ -147,7 +145,6 @@ def main(args):
             sample_fn = model.forward
 
         # Sample images:
-        # with torch.cuda.amp.autocast():
         samples = diffusion.p_sample_loop(
             sample_fn,
             z.shape,
@@ -157,7 +154,6 @@ def main(args):
             progress=True,
             device=device,
         )
-        # samples = diffusion.ddim_sample_loop(sample_fn, z.shape, z, eta=0.0, clip_denoised=False, denoised_fn=None, model_kwargs=model_kwargs, device=device, progress=True)
         if not args.is_uncond:
             samples, _ = samples.chunk(2, dim=0)  # Remove null class samples
 

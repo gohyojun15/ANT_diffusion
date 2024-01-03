@@ -1,3 +1,6 @@
 train
 samples
 *.pyc
+results
+evaluation/VIRTUAL_imagenet256_labeled.npz
+scripts.sh

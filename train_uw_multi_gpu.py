@@ -151,6 +151,13 @@ def main(args):
     ema.eval()  # EMA model should always be in eval mode
 
     # Resume checkpoint
+    if args.resume is not None:
+        ckpt = torch.load(args.resume, map_location="cpu")
+        opt.load_state_dict(ckpt["opt"])
+        model.module.load_state_dict(ckpt["model"])
+        ema.load_state_dict(ckpt["ema"])
+        uw.module.load_state_dict(ckpt["uw"])
+
     args.resume = 0
     epoch = 0
     log_steps = 0
@@ -246,7 +253,6 @@ def main(args):
                 )
     model.eval()  # important! This disables randomized embedding dropout
     # do any sampling/FID calculation/etc. with ema (or model) in eval mode ...
-
     logger.info("Done!")
 
 
@@ -259,14 +265,15 @@ if __name__ == "__main__":
     parser.add_argument("--image-size", type=int, choices=[256, 512], default=256)
     parser.add_argument("--num-classes", type=int, default=1000)
     parser.add_argument("--iterations", type=int, default=400000)
-    parser.add_argument("--global-batch-size", type=int, default=256)
+    parser.add_argument("--global-batch-size", type=int, default=240)
     parser.add_argument("--global-seed", type=int, default=0)
 
-    parser.add_argument("--num-workers", type=int, default=4)
+    parser.add_argument("--num-workers", type=int, default=8)
     parser.add_argument("--log-every", type=int, default=100)
-    parser.add_argument("--ckpt-every", type=int, default=50_000)
+    parser.add_argument("--ckpt-every", type=int, default=10_000)
     parser.add_argument("--gpu_offset", type=int, default=0)  # It choice starting gpu ids
     parser.add_argument("--total_clusters", type=int, default=5)
     parser.add_argument("--grouping_method", choices=["uniform"], default="uniform")
+    parser.add_argument("--resume", type=str, default=None)
     args = parser.parse_args()
     main(args)
