@@ -1,9 +1,6 @@
 # [Neurips 2023] Addressing Negative Transfer in Diffusion Models.
 
 
-
-
-
 <!-- Arxiv Link, Project Link -->
 <a href="https://arxiv.org/abs/2306.00354"><img src="https://img.shields.io/badge/arXiv-2306.00354-b31b1b.svg"></a>
 <a href="https://gohyojun15.github.io/ANT_diffusion/"><img src="https://img.shields.io/badge/Project%20Page-online-brightgreen"></a>
@@ -22,6 +19,7 @@ Our implementation is based on [DiT](https://github.com/facebookresearch/DiT), [
 
 ## Updates
 - **2023.10.07**: [DTR](https://arxiv.org/abs/2310.07138) uses ANT-UW and shows that ANT-UW outperforms [P2weight](https://arxiv.org/abs/2204.00227) and [MinSNR](https://arxiv.org/abs/2310.07138).
+    - Please check our new project ["Denoising Task Routing for Diffusion Models"](https://github.com/byeongjun-park/DTR)
 - **2023.11.05**: Initial release.
 
 
@@ -68,7 +66,8 @@ All models can be downloaded from [OneDrive link](https://1drv.ms/f/s!Aj1gDFRo3D
 | Model | FID | IS | Precision | Recall |
 | :---: | :---: | :---: | :---: | :---: |
 | DiT-L + ANT-UW (Multi-GPU) | 5.695 | 186.661 | 0.811 | 0.491 |
-|TBD|
+| DiT-S + Nash | 44.65 | 33.48 | 0.4209 | 0.5272 |
+| DiT-S + UW | 48.40 | 30.84 | 0.4196 | 0.5172 |
 
 <!-- 
 DiT-S with ANT-UW.
