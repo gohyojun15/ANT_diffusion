@@ -3,6 +3,8 @@
 
 <!-- Arxiv Link, Project Link -->
 <a href="https://arxiv.org/abs/2306.00354"><img src="https://img.shields.io/badge/arXiv-2306.00354-b31b1b.svg"></a>
+<a href="https://openreview.net/forum?id=3G2ec833mW"><img src="https://img.shields.io/badge/OpenReview-NeurIPS2023-orange"></a>
+
 <a href="https://gohyojun15.github.io/ANT_diffusion/"><img src="https://img.shields.io/badge/Project%20Page-online-brightgreen"></a>
 
 <!-- Teasure image: ANT_UW_DITL_output.jpg -->
