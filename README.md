@@ -19,6 +19,7 @@ Our implementation is based on [DiT](https://github.com/facebookresearch/DiT), [
 
 
 ## Updates
+- **2024.05.31**: Uncertainty weighting is utilized in [EDM2](https://github.com/NVlabs/edm2), a concept we had previously explored in our work. We believe that rethinking diffusion models as multi-task learners is an effective direction to improve these models!
 - **2023.10.07**: [DTR](https://arxiv.org/abs/2310.07138) uses ANT-UW and shows that ANT-UW outperforms [P2weight](https://arxiv.org/abs/2204.00227) and [MinSNR](https://arxiv.org/abs/2303.09556).
     - Please check our new project ["Denoising Task Routing for Diffusion Models"](https://github.com/byeongjun-park/DTR)
 - **2023.11.05**: Initial release.
